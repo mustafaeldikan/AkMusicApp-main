@@ -5,6 +5,7 @@ import {
   widthPercentageToDP as wp,
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
+import { useAudio } from "@/src/contexts/AudioContext";
 
 interface IMusicPlayCardProps {
   toggleModal: () => void;
@@ -12,6 +13,21 @@ interface IMusicPlayCardProps {
 
 const MusicPlayCard = (props: IMusicPlayCardProps) => {
   const { toggleModal } = props;
+  const { currentSong, isPlaying, pauseSound, resumeSound } = useAudio();
+
+  const handlePlayPause = async () => {
+    if (isPlaying) {
+      await pauseSound();
+    } else {
+      await resumeSound();
+    }
+  };
+
+  // Don't show the card if no song is selected
+  if (!currentSong) {
+    return null;
+  }
+
   return (
     <Pressable
       android_ripple={{ color: "red" }}
@@ -22,22 +38,27 @@ const MusicPlayCard = (props: IMusicPlayCardProps) => {
         width={wp("15%")}
         height={wp("10%")}
         source={{
-          uri: "https://t4.ftcdn.net/jpg/04/10/17/95/360_F_410179527_ExxSzamajaCtS16dyIjzBRNruqlU5KMA.jpg",
+          uri: currentSong.img,
         }}
       />
       <View style={styles.musicList}>
         <Text style={{ color: "#fff", fontSize: 12, fontWeight: "400" }}>
-          Sabki Baaratein Aayi
+          {currentSong.title}
         </Text>
         <Text style={{ color: "gray", fontSize: 10 }}>
-          4 mins 27 secs. Dev Negi, Seepi Jha, jaspi...
+          {currentSong.desc}
         </Text>
       </View>
       <View
         style={{ flex: 1, justifyContent: "center", alignItems: "flex-end" }}
       >
-        {/* <SimpleLineIcons name="options-vertical" size={12} color="#fff" /> */}
-        <MaterialCommunityIcons name="play" size={25} color="#fff" />
+        <Pressable onPress={handlePlayPause}>
+          <MaterialCommunityIcons 
+            name={isPlaying ? "pause" : "play"} 
+            size={25} 
+            color="#fff" 
+          />
+        </Pressable>
       </View>
     </Pressable>
   );

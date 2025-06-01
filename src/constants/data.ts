@@ -50,23 +50,27 @@ export const playlistArr = [
 
 export const songList = [
   {
-    img: "https://t4.ftcdn.net/jpg/04/10/17/95/360_F_410179527_ExxSzamajaCtS16dyIjzBRNruqlU5KMA.jpg",
-    title: "Sabki Baaratein Aayi",
-    desc: "4 mins 27 secs. Dev Negi, Seepi Jha, jaspi...",
+    img: "https://samplesongs.netlify.app/album-arts/death-bed.jpg",
+    title: "Death Bed",
+    desc: "4 mins 27 secs. Powfu",
+    url: "https://samplesongs.netlify.app/Death%20Bed.mp3",
   },
   {
-    img: "https://t4.ftcdn.net/jpg/04/10/17/95/360_F_410179527_ExxSzamajaCtS16dyIjzBRNruqlU5KMA.jpg",
-    title: "Sabki Baaratein Aayi",
-    desc: "4 mins 27 secs. Dev Negi, Seepi Jha, jaspi...",
+    img: "https://samplesongs.netlify.app/album-arts/bad-liar.jpg",
+    title: "Bad Liar",
+    desc: "3 mins 25 secs. Imagine Dragons",
+    url: "https://samplesongs.netlify.app/Bad%20Liar.mp3",
   },
   {
-    img: "https://t4.ftcdn.net/jpg/04/10/17/95/360_F_410179527_ExxSzamajaCtS16dyIjzBRNruqlU5KMA.jpg",
-    title: "Sabki Baaratein Aayi",
-    desc: "4 mins 27 secs. Dev Negi, Seepi Jha, jaspi...",
+    img: "https://samplesongs.netlify.app/album-arts/faded.jpg",
+    title: "Faded",
+    desc: "3 mins 32 secs. Alan Walker",
+    url: "https://samplesongs.netlify.app/Faded.mp3",
   },
   {
-    img: "https://t4.ftcdn.net/jpg/04/10/17/95/360_F_410179527_ExxSzamajaCtS16dyIjzBRNruqlU5KMA.jpg",
-    title: "Sabki Baaratein Aayi",
-    desc: "4 mins 27 secs. Dev Negi, Seepi Jha, jaspi...",
+    img: "https://samplesongs.netlify.app/album-arts/hate-me.jpg",
+    title: "Hate Me",
+    desc: "3 mins 06 secs. Ellie Goulding",
+    url: "https://samplesongs.netlify.app/Hate%20Me.mp3",
   },
 ];

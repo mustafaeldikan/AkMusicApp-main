@@ -12,6 +12,7 @@ export interface ISongList {
   img: string;
   title: string;
   desc: string;
+  url: string;
 }
 
 export interface ITabInfo {

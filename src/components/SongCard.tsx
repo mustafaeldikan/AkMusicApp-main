@@ -6,6 +6,7 @@ import {
   heightPercentageToDP as hp,
 } from "react-native-responsive-screen";
 import { ISongList } from "@/src/types/common.types";
+import { useAudio } from "@/src/contexts/AudioContext";
 
 interface ISongCardProps {
   item: ISongList;
@@ -14,8 +15,19 @@ interface ISongCardProps {
 
 const SongCard = (props: ISongCardProps) => {
   const { item, onPress } = props;
+  const { playSound } = useAudio();
+
+  const handlePress = async () => {
+    if (onPress) {
+      onPress();
+    } else {
+      // Play the song
+      await playSound(item);
+    }
+  };
+
   return (
-    <Pressable style={styles.musicCard} onPress={onPress}>
+    <Pressable style={styles.musicCard} onPress={handlePress}>
       <Image
         width={wp("15%")}
         height={wp("10%")}

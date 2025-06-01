@@ -14,6 +14,7 @@ import {
   SimpleLineIcons,
 } from "@expo/vector-icons";
 import { Slider } from "@miblanchard/react-native-slider";
+import { useAudio } from "@/src/contexts/AudioContext";
 
 interface IMusicModalProps {
   isModalVisible: boolean;
@@ -22,6 +23,41 @@ interface IMusicModalProps {
 
 const MusicModal = (props: IMusicModalProps) => {
   const { isModalVisible, toggleModal } = props;
+  const { 
+    currentSong, 
+    isPlaying, 
+    position, 
+    duration, 
+    isLoading,
+    playSound, 
+    pauseSound, 
+    resumeSound, 
+    seekTo 
+  } = useAudio();
+
+  const handlePlayPause = async () => {
+    if (isPlaying) {
+      await pauseSound();
+    } else {
+      await resumeSound();
+    }
+  };
+
+  const handleSliderChange = async (value: number | number[]) => {
+    const seekPosition = Array.isArray(value) ? value[0] : value;
+    await seekTo(seekPosition);
+  };
+
+  const formatTime = (timeInMs: number) => {
+    const totalSeconds = Math.floor(timeInMs / 1000);
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  };
+
+  if (!currentSong) {
+    return null;
+  }
 
   return (
     <Modal
@@ -45,27 +81,25 @@ const MusicModal = (props: IMusicModalProps) => {
               <SimpleLineIcons name="arrow-down" size={14} color="#fff" />
             </Pressable>
             <SimpleLineIcons name="options-vertical" size={14} color="#fff" />
-          </View>
+          </View>        <View style={{ alignItems: "center", marginVertical: 20 }}>
+          <Image
+            width={wp("85%")}
+            height={wp("75%")}
+            borderRadius={15}
+            source={{
+              uri: currentSong.img,
+            }}
+          />
+        </View>
 
-          <View style={{ alignItems: "center", marginVertical: 20 }}>
-            <Image
-              width={wp("85%")}
-              height={wp("75%")}
-              borderRadius={15}
-              source={{
-                uri: "https://t4.ftcdn.net/jpg/04/10/17/95/360_F_410179527_ExxSzamajaCtS16dyIjzBRNruqlU5KMA.jpg",
-              }}
-            />
-          </View>
-
-          <View>
-            <Text style={{ color: "#fff", fontSize: 20, fontWeight: "400" }}>
-              Sabki Baaratein Aayi
-            </Text>
-            <Text style={{ color: "gray", fontSize: 15 }}>
-              4 mins 27 secs. Dev Negi, Seepi Jha, jaspi...
-            </Text>
-          </View>
+        <View>
+          <Text style={{ color: "#fff", fontSize: 20, fontWeight: "400" }}>
+            {currentSong.title}
+          </Text>
+          <Text style={{ color: "gray", fontSize: 15 }}>
+            {currentSong.desc}
+          </Text>
+        </View>
 
           <View
             style={{
@@ -86,15 +120,23 @@ const MusicModal = (props: IMusicModalProps) => {
               <Entypo name="forward" size={18} color="#fff" />
               <Text style={{ color: "#fff" }}>Share</Text>
             </View>
-          </View>
-
-          <View style={{ marginVertical: 20 }}>
+          </View>          <View style={{ marginVertical: 20 }}>
             <Slider
-              style={{}}
-              minimumValue={1}
-              maximumValue={10}
+              value={position}
+              minimumValue={0}
+              maximumValue={duration || 1}
               minimumTrackTintColor="#FFFFFF"
               maximumTrackTintColor="#000000"
+              onValueChange={handleSliderChange}
+              thumbStyle={{
+                backgroundColor: '#FFFFFF',
+                width: 20,
+                height: 20,
+              }}
+              trackStyle={{
+                height: 4,
+                borderRadius: 2,
+              }}
             />
             <View
               style={{ flexDirection: "row", justifyContent: "space-between" }}
@@ -102,32 +144,34 @@ const MusicModal = (props: IMusicModalProps) => {
               <Text
                 style={{ color: "#fff", fontSize: 10, paddingHorizontal: 15 }}
               >
-                00.01
+                {formatTime(position)}
               </Text>
               <Text
                 style={{ color: "#fff", fontSize: 10, paddingHorizontal: 15 }}
               >
-                00.01
+                {formatTime(duration)}
               </Text>
             </View>
-          </View>
-
-          <View style={styles.musicIcon}>
+          </View>          <View style={styles.musicIcon}>
             <Entypo name="line-graph" size={34} color="#fff" />
             <Entypo name="controller-jump-to-start" size={36} color="#fff" />
-            <View
+            <Pressable
               style={{
                 padding: 12,
                 borderRadius: wp("50%"),
                 backgroundColor: "#fff",
                 justifyContent: "center",
                 alignItems: "center",
-                // width: wp('18%'),
-                // height: wp('18%'),
               }}
+              onPress={handlePlayPause}
+              disabled={isLoading}
             >
-              <MaterialCommunityIcons name="play" size={45} color="black" />
-            </View>
+              <MaterialCommunityIcons 
+                name={isLoading ? "loading" : (isPlaying ? "pause" : "play")} 
+                size={45} 
+                color="black" 
+              />
+            </Pressable>
             <Entypo name="controller-next" size={36} color="#fff" />
             <FontAwesome name="exchange" size={34} color="#fff" />
           </View>
